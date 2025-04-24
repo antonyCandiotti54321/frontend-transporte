@@ -26,7 +26,15 @@ function Login({ onLogin }) {
       localStorage.setItem('token', data.token)
       localStorage.setItem('nombreCompleto', data.nombreCompleto)
       localStorage.setItem('role', data.role)
-      localStorage.setItem('id', data.id) // <-- esta es la nueva línea
+      localStorage.setItem('id', data.id)
+
+      // Imprimir la información guardada
+      console.log('Token:', localStorage.getItem('token'))
+      console.log('Nombre Completo:', localStorage.getItem('nombreCompleto'))
+      console.log('Role:', localStorage.getItem('role'))
+      console.log('ID:', localStorage.getItem('id'))
+
+      // Llamamos a onLogin con el token
       onLogin(data.token)
 
     } catch (err) {
