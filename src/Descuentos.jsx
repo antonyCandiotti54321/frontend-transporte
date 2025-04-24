@@ -5,10 +5,10 @@ function Descuentos({ onInicio }) {
   const [empleados, setEmpleados] = useState([]);
   const [idEmpleado, setIdEmpleado] = useState('');
   const [soles, setSoles] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [mensajeDesc, setMensajeDesc] = useState('');     // Estado para el input de mensaje
   const [imagenUrl, setImagenUrl] = useState('');
+  const [feedback, setFeedback] = useState('');           // Estado para el mensaje de respuesta
 
-  // Obtener token e idChofer desde localStorage
   const token = localStorage.getItem('token');
   const idChofer = localStorage.getItem('id');
 
@@ -18,15 +18,13 @@ function Descuentos({ onInicio }) {
 
     const fetchEmpleados = async () => {
       try {
-        const response = await fetch('https://transporte-ecug.onrender.com/api/empleado', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const res = await fetch('https://transporte-ecug.onrender.com/api/empleado', {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await response.json();
+        const data = await res.json();
         setEmpleados(data);
-      } catch (error) {
-        console.error('Error al obtener empleados:', error);
+      } catch (err) {
+        console.error('Error al obtener empleados:', err);
       }
     };
 
@@ -37,20 +35,20 @@ function Descuentos({ onInicio }) {
     e.preventDefault();
 
     if (!idChofer) {
-      setMensaje('No se encontró el ID del chofer. Por favor, inicia sesión nuevamente.');
+      setFeedback('No se encontró el ID del chofer. Inicia sesión de nuevo.');
       return;
     }
 
     try {
       const descuentoRequest = {
         idChofer: parseInt(idChofer),
-        idEmpleado,
+        idEmpleado: parseInt(idEmpleado),
         soles: parseFloat(soles),
-        mensaje,
+        mensaje: mensajeDesc,        // Uso del mensaje de input
         imagenUrl,
       };
 
-      const response = await fetch('https://transporte-ecug.onrender.com/api/chofer/descuentos', {
+      const res = await fetch('https://transporte-ecug.onrender.com/api/chofer/descuentos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,11 +57,20 @@ function Descuentos({ onInicio }) {
         body: JSON.stringify(descuentoRequest),
       });
 
-      const data = await response.json();
-      setMensaje(response.ok ? 'Descuento creado correctamente' : data.message || 'Error al crear descuento');
-    } catch (error) {
-      console.error('Error al crear descuento:', error);
-      setMensaje('Error de red');
+      const data = await res.json();
+      if (res.ok) {
+        setFeedback('Descuento creado correctamente');
+        // Limpiar formulario
+        setIdEmpleado('');
+        setSoles('');
+        setMensajeDesc('');
+        setImagenUrl('');
+      } else {
+        setFeedback(data.message || 'Error al crear descuento');
+      }
+    } catch (err) {
+      console.error('Error al crear descuento:', err);
+      setFeedback('Error de red');
     }
   };
 
@@ -75,30 +82,54 @@ function Descuentos({ onInicio }) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
           <label>
             Empleado:
-            <select value={idEmpleado} onChange={(e) => setIdEmpleado(e.target.value)} style={{ padding: '0.75rem' }} required>
+            <select
+              value={idEmpleado}
+              onChange={(e) => setIdEmpleado(e.target.value)}
+              style={{ padding: '0.75rem' }}
+              required
+            >
               <option value="">Selecciona un empleado</option>
-              {empleados.map((empleado) => (
-                <option key={empleado.id} value={empleado.id}>
-                  {empleado.nombreCompleto}
+              {empleados.map((emp) => (
+                <option key={emp.id} value={emp.id}>
+                  {emp.nombreCompleto}
                 </option>
               ))}
             </select>
           </label>
+
           <label>
             Monto (S/):
-            <input type="number" value={soles} onChange={(e) => setSoles(e.target.value)} required />
+            <input
+              type="number"
+              value={soles}
+              onChange={(e) => setSoles(e.target.value)}
+              required
+            />
           </label>
+
           <label>
             Mensaje:
-            <input type="text" value={mensaje} onChange={(e) => setMensaje(e.target.value)} required />
+            <input
+              type="text"
+              value={mensajeDesc}
+              onChange={(e) => setMensajeDesc(e.target.value)}
+              required
+            />
           </label>
+
           <label>
             URL de la imagen:
-            <input type="text" value={imagenUrl} onChange={(e) => setImagenUrl(e.target.value)} />
+            <input
+              type="text"
+              value={imagenUrl}
+              onChange={(e) => setImagenUrl(e.target.value)}
+            />
           </label>
+
           <button type="submit">Crear Descuento</button>
         </form>
-        {mensaje && <p>{mensaje}</p>}
+
+        {feedback && <p>{feedback}</p>}
       </main>
     </div>
   );
