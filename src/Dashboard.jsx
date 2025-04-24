@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function Dashboard({ token, onLogout, onCrearUsuario, onDescuentos }) {
+function Dashboard({ token, onLogout, onCrearUsuario, onDescuentos, onDescuentoTotal }) {
   const [nombre, setNombre] = useState('')
   const [role, setRole] = useState('')
 
@@ -21,7 +21,8 @@ function Dashboard({ token, onLogout, onCrearUsuario, onDescuentos }) {
           {role === 'ADMIN' && (
             <>
               <button onClick={onCrearUsuario} style={styles.link}>Crear usuario</button>
-              <a href="#" style={styles.link}>Descuento total</a>
+              <a href="#" style={styles.link} onClick={() => onDescuentoTotal()}>Descuento total</a> 
+
             </>
           )}
         </nav>
