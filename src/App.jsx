@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Login from './Login'
 import Dashboard from './Dashboard'
 import CrearUsuario from './CrearUsuario'
+import Descuentos from './Descuentos' // 🆕
 
 function App() {
   const [token, setToken] = useState(null)
@@ -21,9 +22,21 @@ function App() {
 
   if (!token) return <Login onLogin={handleLogin} />
 
-  return view === 'crear'
-    ? <CrearUsuario token={token} onInicio={() => setView('dashboard')} />
-    : <Dashboard token={token} onLogout={handleLogout} onCrearUsuario={() => setView('crear')} />
+  switch (view) {
+    case 'crear':
+      return <CrearUsuario token={token} onInicio={() => setView('dashboard')} />
+    case 'descuentos':
+      return <Descuentos onInicio={() => setView('dashboard')} />
+    default:
+      return (
+        <Dashboard
+          token={token}
+          onLogout={handleLogout}
+          onCrearUsuario={() => setView('crear')}
+          onDescuentos={() => setView('descuentos')} // 🆕
+        />
+      )
+  }
 }
 
 export default App
