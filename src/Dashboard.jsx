@@ -17,8 +17,17 @@ function Dashboard({ token, onLogout }) {
         <h2 style={styles.logo}>Transporte</h2>
         <nav style={styles.nav}>
           <a href="#" style={styles.link}>Inicio</a>
-          <a href="#" style={styles.link}>Viajes</a>
-          <a href="#" style={styles.link}>Conductores</a>
+  
+          {role === 'CHOFER' && (
+            <a href="#" style={styles.link}>Descuentos</a>
+          )}
+  
+          {role === 'ADMIN' && (
+            <>
+              <a href="#" style={styles.link}>Crear usuario</a>
+              <a href="#" style={styles.link}>Descuento total</a>
+            </>
+          )}
         </nav>
         <button style={styles.logout} onClick={onLogout}>
           Cerrar sesión
@@ -31,6 +40,7 @@ function Dashboard({ token, onLogout }) {
       </main>
     </div>
   )
+  
 }
 
 const styles = {
