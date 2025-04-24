@@ -1,8 +1,7 @@
 // src/Dashboard.jsx
 import { useEffect, useState } from 'react'
 
-function Dashboard({ token, onLogout }) {
-  // Leer nombre y role desde localStorage
+function Dashboard({ token, onLogout, onCrearUsuario }) {
   const [nombre, setNombre] = useState('')
   const [role, setRole] = useState('')
 
@@ -17,15 +16,15 @@ function Dashboard({ token, onLogout }) {
         <h2 style={styles.logo}>Transporte</h2>
         <nav style={styles.nav}>
           <a href="#" style={styles.link}>Inicio</a>
-  
+
           {role === 'CHOFER' && (
             <a href="#" style={styles.link}>Descuentos</a>
           )}
-  
+
           {role === 'ADMIN' && (
             <>
-    <button onClick={onCrearUsuario} style={styles.link}>Crear usuario</button>
-    <a href="#" style={styles.link}>Descuento total</a>
+              <button onClick={onCrearUsuario} style={styles.linkButton}>Crear usuario</button>
+              <a href="#" style={styles.link}>Descuento total</a>
             </>
           )}
         </nav>
@@ -40,7 +39,6 @@ function Dashboard({ token, onLogout }) {
       </main>
     </div>
   )
-  
 }
 
 const styles = {
@@ -59,8 +57,8 @@ const styles = {
     padding: '1rem',
   },
   logo: {
-    marginBottom: '2rem',
     fontSize: '1.5rem',
+    marginBottom: '1rem',
   },
   nav: {
     display: 'flex',
@@ -70,27 +68,33 @@ const styles = {
   link: {
     color: 'white',
     textDecoration: 'none',
-    fontSize: '1rem',
+    backgroundColor: '#16213e',
+    padding: '0.5rem 1rem',
+    borderRadius: '4px',
+    textAlign: 'center',
+  },
+  linkButton: {
+    background: 'none',
+    border: 'none',
+    color: 'white',
+    textAlign: 'left',
+    padding: '0.5rem 1rem',
+    cursor: 'pointer',
+    textDecoration: 'underline',
   },
   logout: {
+    marginTop: 'auto',
+    padding: '0.5rem',
     backgroundColor: '#e94560',
-    border: 'none',
-    borderRadius: '8px',
-    padding: '0.8rem',
     color: 'white',
+    border: 'none',
     cursor: 'pointer',
-    fontSize: '1rem',
+    borderRadius: '4px',
   },
   content: {
-    flexGrow: 1,
-    backgroundColor: '#f5f5f5',
+    flex: 1,
     padding: '2rem',
-  },
-}
-
-const onCrearUsuario = () => {
-    window.location.href = '/crear-usuario'; // redirige a la nueva ruta
   }
-  
+}
 
 export default Dashboard
