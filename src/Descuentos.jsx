@@ -7,17 +7,11 @@ function Descuentos({ onInicio }) {
   const [mensajeDesc, setMensajeDesc] = useState('');
   const [feedback, setFeedback] = useState('');
 
-  // token e idChofer de localStorage
   const token = localStorage.getItem('token');
   const idChofer = localStorage.getItem('id');
-
-  // valor por defecto oculto para imagenUrl
   const [imagenUrl] = useState('***************');
 
   useEffect(() => {
-    console.log('Token:', token);
-    console.log('ID Chofer:', idChofer);
-
     const fetchEmpleados = async () => {
       try {
         const res = await fetch('https://transporte-ecug.onrender.com/api/empleado', {
@@ -47,7 +41,7 @@ function Descuentos({ onInicio }) {
         idEmpleado: parseInt(idEmpleado, 10),
         soles: parseFloat(soles),
         mensaje: mensajeDesc,
-        imagenUrl,             // siempre envía '***************'
+        imagenUrl,             
       };
 
       const res = await fetch('https://transporte-ecug.onrender.com/api/chofer/descuentos', {
@@ -62,7 +56,6 @@ function Descuentos({ onInicio }) {
       const data = await res.json();
       if (res.ok) {
         setFeedback('Descuento creado correctamente');
-        // limpia formulario
         setIdEmpleado('');
         setSoles('');
         setMensajeDesc('');
@@ -87,49 +80,53 @@ function Descuentos({ onInicio }) {
       </aside>
 
       <main style={styles.content}>
-        <h2>Crear Descuento</h2>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-          <label>
-            Empleado:
-            <select
-              value={idEmpleado}
-              onChange={(e) => setIdEmpleado(e.target.value)}
-              style={{ padding: '0.75rem' }}
-              required
-            >
-              <option value="">Selecciona un empleado</option>
-              {empleados.map((emp) => (
-                <option key={emp.id} value={emp.id}>
-                  {emp.nombreCompleto}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div style={styles.formContainer}>
+          <h2 style={styles.title}>Crear Descuento</h2>
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <label style={styles.label}>
+              Empleado:
+              <select
+                value={idEmpleado}
+                onChange={(e) => setIdEmpleado(e.target.value)}
+                style={styles.input}
+                required
+              >
+                <option value="">Selecciona un empleado</option>
+                {empleados.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.nombreCompleto}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <label>
-            Monto (S/):
-            <input
-              type="number"
-              value={soles}
-              onChange={(e) => setSoles(e.target.value)}
-              required
-            />
-          </label>
+            <label style={styles.label}>
+              Monto (S/):
+              <input
+                type="number"
+                value={soles}
+                onChange={(e) => setSoles(e.target.value)}
+                style={styles.input}
+                required
+              />
+            </label>
 
-          <label>
-            Mensaje:
-            <input
-              type="text"
-              value={mensajeDesc}
-              onChange={(e) => setMensajeDesc(e.target.value)}
-              required
-            />
-          </label>
+            <label style={styles.label}>
+              Mensaje:
+              <input
+                type="text"
+                value={mensajeDesc}
+                onChange={(e) => setMensajeDesc(e.target.value)}
+                style={styles.input}
+                required
+              />
+            </label>
 
-          <button type="submit">Crear Descuento</button>
-        </form>
+            <button type="submit" style={styles.button}>Crear Descuento</button>
+          </form>
 
-        {feedback && <p>{feedback}</p>}
+          {feedback && <p style={styles.feedback}>{feedback}</p>}
+        </div>
       </main>
     </div>
   );
@@ -140,6 +137,7 @@ const styles = {
     display: 'flex',
     height: '100vh',
     fontFamily: 'sans-serif',
+    backgroundColor: '#f0f2f5',
   },
   sidebar: {
     width: '240px',
@@ -179,7 +177,63 @@ const styles = {
   },
   content: {
     flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: '2rem',
+  },
+  formContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2rem',
+    maxWidth: '600px',
+    width: '100%',
+    backgroundColor: 'white',
+    padding: '2rem',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    alignSelf: 'flex-start',
+    marginBottom: '1rem',
+    fontSize: '1.75rem',
+    color: '#333',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1.5rem',
+  },
+  label: {
+    fontSize: '1.1rem',
+    color: '#333',
+  },
+  input: {
+    padding: '1rem',
+    fontSize: '1rem',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    marginTop: '0.5rem',
+    outline: 'none',
+    width: '100%',
+  },
+  button: {
+    padding: '1rem',
+    fontSize: '1.2rem',
+    color: 'white',
+    backgroundColor: '#1a73e8', // Color que combina con el dashboard
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s',
+  },
+  buttonHover: {
+    backgroundColor: '#0f59b0',
+  },
+  feedback: {
+    fontSize: '1rem',
+    color: '#333',
+    marginTop: '1rem',
   },
 };
 

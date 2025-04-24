@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
 
 function DescuentoTotal({ onInicio }) {
   const [descuentosTotal, setDescuentosTotal] = useState([]);
-  const [loading, setLoading] = useState(true);  // Para manejar el estado de carga
-  const [error, setError] = useState('');  // Para manejar errores
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // token de localStorage
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -17,20 +15,19 @@ function DescuentoTotal({ onInicio }) {
         const res = await fetch('https://transporte-ecug.onrender.com/api/admin/descuentos/descuento-total', {
           headers: { Authorization: `Bearer ${token}` },
         });
-    
+
         if (!res.ok) {
           throw new Error('No se pudo obtener los descuentos. Estado: ' + res.status);
         }
-    
+
         const data = await res.json();
         setDescuentosTotal(data);
       } catch (err) {
-        setError('Error al obtener los descuentos totales: ' + err.message);  // Mostrar detalles del error
+        setError('Error al obtener los descuentos totales: ' + err.message);
       } finally {
         setLoading(false);
       }
     };
-    
 
     fetchDescuentoTotal();
   }, [token]);
@@ -48,27 +45,28 @@ function DescuentoTotal({ onInicio }) {
       <main style={styles.content}>
         <h1>Descuento Total</h1>
 
-        {loading && <p>Cargando...</p>}  {/* Mostrar mensaje de carga mientras se obtiene la data */}
-        {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Mostrar mensaje de error si ocurre algún problema */}
+        {loading && <p>Cargando...</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        {/* Mostrar los descuentos si los hay */}
         {!loading && !error && (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th style={styles.th}>Empleado</th>
-                <th style={styles.th}>Total en Soles</th>
-              </tr>
-            </thead>
-            <tbody>
-              {descuentosTotal.map((desc) => (
-                <tr key={desc.idEmpleado}>
-                  <td style={styles.td}>{desc.nombreEmpleado}</td>
-                  <td style={styles.td}>{desc.totalSoles}</td>
+          <div style={styles.tableWrapper}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Empleado</th>
+                  <th style={styles.th}>Total en Soles</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {descuentosTotal.map((desc) => (
+                  <tr key={desc.idEmpleado}>
+                    <td style={styles.td}>{desc.nombreEmpleado}</td>
+                    <td style={styles.td}>{desc.totalSoles}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </main>
     </div>
@@ -80,6 +78,7 @@ const styles = {
     display: 'flex',
     height: '100vh',
     fontFamily: 'sans-serif',
+    backgroundColor: '#f5f7fa',
   },
   sidebar: {
     width: '240px',
@@ -121,14 +120,32 @@ const styles = {
     flex: 1,
     padding: '2rem',
   },
+  tableWrapper: {
+    overflowX: 'auto',
+    marginTop: '1rem',
+  },
+  table: {
+    width: '90%',
+    maxWidth: '1000px',
+    margin: '0 auto',
+    borderCollapse: 'separate',
+    borderSpacing: 0,
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    fontSize: '1.1rem',
+  },
   th: {
-    padding: '0.75rem',
+    padding: '1rem',
     textAlign: 'left',
-    borderBottom: '1px solid #ddd',
+    backgroundColor: '#394867',
+    color: 'white',
+    fontWeight: 'bold',
   },
   td: {
-    padding: '0.75rem',
-    borderBottom: '1px solid #ddd',
+    padding: '1rem',
+    backgroundColor: '#ffffff',
+    borderBottom: '1px solid #e0e0e0',
   },
 };
 
