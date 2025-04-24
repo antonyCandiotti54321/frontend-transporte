@@ -23,9 +23,11 @@ function Login({ onLogin }) {
         throw new Error('Invalid credentials')
       }
 
-      const data = await response.json()
-      localStorage.setItem('token', data.token)
-      onLogin(data.token)
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('nombreCompleto', data.nombreCompleto);
+      onLogin(data.token);
+      
     } catch (err) {
       console.error(err.message)
       setError('Login failed. Please check your credentials.')
