@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState, useEffect } from 'react'
 import Login from './Login'
 import Dashboard from './Dashboard'
@@ -23,7 +22,7 @@ function App() {
   if (!token) return <Login onLogin={handleLogin} />
 
   return view === 'crear'
-    ? <CrearUsuario token={token} />
+    ? <CrearUsuario token={token} onInicio={() => setView('dashboard')} />
     : <Dashboard token={token} onLogout={handleLogout} onCrearUsuario={() => setView('crear')} />
 }
 

@@ -1,71 +1,54 @@
-// src/Sidebar.jsx
-function Sidebar({ role, onLogout, onCrearUsuario }) {
+function Sidebar({ onInicio, onCrearUsuario, onVerUsuarios, onCerrarSesion }) {
     return (
-      <aside style={styles.sidebar}>
-        <h2 style={styles.logo}>Transporte</h2>
-        <nav style={styles.nav}>
-          <a href="#" style={styles.link}>Inicio</a>
-  
-          {role === 'CHOFER' && (
-            <a href="#" style={styles.link}>Descuentos</a>
-          )}
-  
-          {role === 'ADMIN' && (
-            <>
-              <button onClick={onCrearUsuario} style={styles.linkButton}>Crear usuario</button>
-              <a href="#" style={styles.link}>Descuento total</a>
-            </>
-          )}
+      <aside style={sidebarStyle}>
+        <h2 style={titleStyle}>Transporte</h2>
+        <nav style={navStyle}>
+          <button onClick={onInicio} style={buttonStyle}>Inicio</button>
+          <button onClick={onCrearUsuario} style={buttonStyle}>Crear usuario</button>
+          <button onClick={onVerUsuarios} style={buttonStyle}>Ver usuarios</button>
         </nav>
-        <button style={styles.logout} onClick={onLogout}>
-          Cerrar sesión
-        </button>
+        <div style={{ marginTop: 'auto' }}>
+          <button onClick={onCerrarSesion} style={{ ...buttonStyle, backgroundColor: '#e94560' }}>Cerrar sesión</button>
+        </div>
       </aside>
     )
   }
   
-  const styles = {
-    sidebar: {
-      width: '240px',
-      backgroundColor: '#1a1a2e',
-      color: 'white',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '1rem',
-    },
-    logo: {
-      fontSize: '1.5rem',
-      marginBottom: '2rem',
-    },
-    nav: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
-    },
-    link: {
-      color: 'white',
-      textDecoration: 'none',
-      background: 'none',
-      border: 'none',
-      textAlign: 'left',
-      padding: '0.5rem 0',
-    },
-    linkButton: {
-      backgroundColor: '#2e2e4e',
-      color: 'white',
-      border: 'none',
-      padding: '0.5rem 1rem',
-      textAlign: 'left',
-      cursor: 'pointer',
-    },
-    logout: {
-      marginTop: 'auto',
-      backgroundColor: '#ff4d4d',
-      color: 'white',
-      border: 'none',
-      padding: '0.5rem 1rem',
-      cursor: 'pointer',
-    },
+  const sidebarStyle = {
+    width: '240px',
+    backgroundColor: '#0f3460',
+    color: 'white',
+    padding: '2rem 1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+    borderRight: '1px solid #16213e'
+  }
+  
+  const titleStyle = {
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    marginBottom: '2rem',
+    textAlign: 'center',
+    letterSpacing: '1px'
+  }
+  
+  const navStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem'
+  }
+  
+  const buttonStyle = {
+    color: '#fff',
+    backgroundColor: '#1a1a2e',
+    padding: '0.75rem 1rem',
+    borderRadius: '8px',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    transition: 'background-color 0.3s',
   }
   
   export default Sidebar
