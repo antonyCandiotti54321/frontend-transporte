@@ -13,9 +13,7 @@ function Login({ onLogin }) {
     try {
       const response = await fetch('https://transporte-ecug.onrender.com/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       })
 
@@ -23,11 +21,13 @@ function Login({ onLogin }) {
         throw new Error('Invalid credentials')
       }
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('nombreCompleto', data.nombreCompleto);
-      onLogin(data.token);
-      
+      const data = await response.json()
+      // Guardamos token, nombre y role
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('nombreCompleto', data.nombreCompleto)
+      localStorage.setItem('role', data.role)
+      onLogin(data.token)
+
     } catch (err) {
       console.error(err.message)
       setError('Login failed. Please check your credentials.')
