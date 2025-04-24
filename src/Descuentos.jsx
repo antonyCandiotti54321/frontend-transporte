@@ -5,16 +5,19 @@ function Descuentos({ onInicio }) {
   const [empleados, setEmpleados] = useState([]);
   const [idEmpleado, setIdEmpleado] = useState('');
   const [soles, setSoles] = useState('');
-  const [mensajeDesc, setMensajeDesc] = useState('');     // Estado para el input de mensaje
-  const [imagenUrl, setImagenUrl] = useState('');
-  const [feedback, setFeedback] = useState('');           // Estado para el mensaje de respuesta
+  const [mensajeDesc, setMensajeDesc] = useState('');
+  const [feedback, setFeedback] = useState('');
 
+  // token e idChofer de localStorage
   const token = localStorage.getItem('token');
   const idChofer = localStorage.getItem('id');
 
+  // valor por defecto oculto para imagenUrl
+  const [imagenUrl] = useState('***************');
+
   useEffect(() => {
-    console.log('Token desde localStorage:', token);
-    console.log('ID Chofer desde localStorage:', idChofer);
+    console.log('Token:', token);
+    console.log('ID Chofer:', idChofer);
 
     const fetchEmpleados = async () => {
       try {
@@ -41,11 +44,11 @@ function Descuentos({ onInicio }) {
 
     try {
       const descuentoRequest = {
-        idChofer: parseInt(idChofer),
-        idEmpleado: parseInt(idEmpleado),
+        idChofer: parseInt(idChofer, 10),
+        idEmpleado: parseInt(idEmpleado, 10),
         soles: parseFloat(soles),
-        mensaje: mensajeDesc,        // Uso del mensaje de input
-        imagenUrl,
+        mensaje: mensajeDesc,
+        imagenUrl,             // siempre envía '***************'
       };
 
       const res = await fetch('https://transporte-ecug.onrender.com/api/chofer/descuentos', {
@@ -60,11 +63,10 @@ function Descuentos({ onInicio }) {
       const data = await res.json();
       if (res.ok) {
         setFeedback('Descuento creado correctamente');
-        // Limpiar formulario
+        // limpia formulario
         setIdEmpleado('');
         setSoles('');
         setMensajeDesc('');
-        setImagenUrl('');
       } else {
         setFeedback(data.message || 'Error al crear descuento');
       }
@@ -114,15 +116,6 @@ function Descuentos({ onInicio }) {
               value={mensajeDesc}
               onChange={(e) => setMensajeDesc(e.target.value)}
               required
-            />
-          </label>
-
-          <label>
-            URL de la imagen:
-            <input
-              type="text"
-              value={imagenUrl}
-              onChange={(e) => setImagenUrl(e.target.value)}
             />
           </label>
 
