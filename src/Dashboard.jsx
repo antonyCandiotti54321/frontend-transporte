@@ -24,8 +24,8 @@ function Dashboard({ token, onLogout }) {
   
           {role === 'ADMIN' && (
             <>
-              <a href="#" style={styles.link}>Crear usuario</a>
-              <a href="#" style={styles.link}>Descuento total</a>
+    <button onClick={onCrearUsuario} style={styles.link}>Crear usuario</button>
+    <a href="#" style={styles.link}>Descuento total</a>
             </>
           )}
         </nav>
@@ -87,5 +87,10 @@ const styles = {
     padding: '2rem',
   },
 }
+
+const onCrearUsuario = () => {
+    window.location.href = '/crear-usuario'; // redirige a la nueva ruta
+  }
+  
 
 export default Dashboard
