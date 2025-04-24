@@ -22,10 +22,11 @@ function Login({ onLogin }) {
       }
 
       const data = await response.json()
-      // Guardamos token, nombre y role
+      // Guardamos token, nombre, role e id
       localStorage.setItem('token', data.token)
       localStorage.setItem('nombreCompleto', data.nombreCompleto)
       localStorage.setItem('role', data.role)
+      localStorage.setItem('id', data.id) // <-- esta es la nueva línea
       onLogin(data.token)
 
     } catch (err) {
