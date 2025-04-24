@@ -1,6 +1,7 @@
 // src/App.jsx
 import { useState, useEffect } from 'react'
 import Login from './Login'
+import Dashboard from './Dashboard'
 
 function App() {
   const [token, setToken] = useState(null)
@@ -21,17 +22,9 @@ function App() {
     setToken(null)
   }
 
-  if (!token) {
-    return <Login onLogin={handleLogin} />
-  }
-
-  return (
-    <div>
-      <h1>Bienvenido</h1>
-      <p>Token actual: <code>{token.slice(0, 30)}...</code></p>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  )
+  return token
+    ? <Dashboard token={token} onLogout={handleLogout} />
+    : <Login onLogin={handleLogin} />
 }
 
 export default App
